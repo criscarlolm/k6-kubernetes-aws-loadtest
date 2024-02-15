@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: CHANGE_THIS # update CHANGE_THIS to your preferred config name
+data:
+  # update CHANGE_THIS.js to your preferred js file name
+  # after name update, add the code after the pipe, make sure to indent properly
+  # NOTE: see cm-sample.yaml
+  CHANGE_THIS.js: |

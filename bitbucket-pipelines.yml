@@ -1,0 +1,88 @@
+image: atlassian/default-image:3
+
+#release-dev: &release-dev
+#  step:
+#    name: Release development version
+#    trigger: manual
+#    image: python:3.10
+#    script:
+#      - pip install semversioner
+#      - VERSION=$(semversioner current-version).${BITBUCKET_BUILD_NUMBER}-dev
+#      - pipe: atlassian/bitbucket-pipe-release:5.3.2
+#        variables:
+#          REGISTRY_USERNAME: $REGISTRY_USERNAME
+#          REGISTRY_PASSWORD: $REGISTRY_PASSWORD
+#          IMAGE: docker-public.packages.atlassian.com/bitbucketpipelines/$BITBUCKET_REPO_SLUG
+#          REGISTRY_URL: docker-public.packages.atlassian.com
+#          GIT_PUSH: 'false'
+#          VERSION: ${VERSION}
+#    services:
+#      - docker
+
+create-cm: &create-cm-from-file
+  step:
+    name: Create Test Scripts
+    image: amazon/aws-cli
+    script:
+      - curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+      - chmod +x ./kubectl
+      - mv ./kubectl /usr/local/bin/kubectl
+      - export AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - aws eks update-kubeconfig --name lm-cluster-stg --region us-east-2
+      - kubectl create configmap $JS_FILE --from-file=eks/js/$JS_FILE.js -o yaml --dry-run=client | kubectl apply -f -
+
+push-cm: &push-cm
+  step:
+    name: Push Test Scripts
+    script:
+      - pipe: atlassian/aws-eks-kubectl-run:2.4.0
+        variables:
+          AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+          AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+          AWS_DEFAULT_REGION: "us-east-2"
+          CLUSTER_NAME: "lm-cluster-stg"
+          KUBECTL_COMMAND: "apply"
+          RESOURCE_PATH: "eks/cm/$CONFIG_MAP_FILE.yaml"
+          #KUBECTL_ARGS:
+          #  - "--dry-run"
+          #DEBUG: "true"
+
+run-load: &run-load
+  step:
+    name: Prepare
+    image: python:3.10
+    #condition:
+    script:
+       - apt-get update && apt-get install -y jq
+       - pip install yq awscli
+       - export AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+       - export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+       - curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+       - chmod +x ./kubectl
+       - mv ./kubectl /usr/local/bin/kubectl
+       - aws eks update-kubeconfig --name lm-cluster-stg --region us-east-2
+       - cd eks/ksix && ls
+       - DATE_NOW=$(date +%Y%m%d) && TIME_NOW=$(date +%H%M%S)
+       - KSIX_NAME=ksixrun-$DATE_NOW-$TIME_NOW
+       - yq -y ".metadata.name = \"$KSIX_NAME\"" ksix-run.yaml -i
+       - yq -y ".spec.script.configMap.name = \"$JS_FILE\"" ksix-run.yaml -i
+       - yq -y ".spec.script.configMap.file = \"$JS_FILE.js\"" ksix-run.yaml -i
+       - kubectl apply -f ksix-run.yaml
+
+
+pipelines:
+  custom:
+    run-ksix:
+      - variables:
+          - name: JS_FILE
+            description: "Input JS file name (NOTE: don't include .js extension)"
+      - <<: *create-cm-from-file
+      - <<: *run-load
+#  branches:
+#    master:
+#     - <<: *push-cm
+#    release:
+#     - <<: *release
+#    - <<: *setup
+#    - <<: *test

@@ -1,0 +1,26 @@
+# create a cm obj for this test run
+# either pass from file or create a cm obj from yaml
+# cmd: kubectl create configmap my-test --from-file test.js
+apiVersion: k6.io/v1alpha1
+kind: K6
+metadata:
+  name: ksixrun
+spec:
+  parallelism: 1
+  cleanup: post # clean up after test run
+  script:
+    configMap:
+      #name: headless-cm
+      #file: headless.js
+      name: demo-test-cm
+      file: test.js
+      #name: browser-based
+      #file: browser-based.js
+  arguments: -o experimental-prometheus-rw # prom remote rw
+  runner:
+    image: grafana/k6:latest-with-browser
+    env:
+      - name: K6_PROMETHEUS_RW_SERVER_URL
+        value: "https://prometheus.aws.legalmatch.com/api/v1/write"
+      - name: K6_PROMETHEUS_RW_TREND_AS_NATIVE_HISTOGRAM
+        value: "true"

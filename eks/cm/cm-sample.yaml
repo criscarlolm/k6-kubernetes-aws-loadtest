@@ -1,0 +1,51 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: sample-cm
+data:
+  sample.js: |
+    import { browser } from 'k6/experimental/browser';
+    import { check } from 'k6';
+    
+    export const options = {
+        scenarios: {
+            ui: {
+                executor: 'constant-vus',
+                options: {
+                    browser: {
+                        type: 'chromium'
+                    }
+                },
+                vus: 1,
+                duration: '30s'
+            }
+        }
+    };
+    
+    
+    export default async function () {
+        const page = browser.newPage();
+        try {
+            await page.goto('https://test.legalmatch.com/');
+            page.screenshot({ path: 'screenshot.png' });
+            check(page, {
+                'Find the Right Lawyer for Your Legal Issue!': (page) =>
+                    page.locator("(//a[@class='case-intake-form__header--link'])[1]").isVisible() ===
+                    true
+            });
+    
+            check(page, {
+                'Hero Banner': (page) => page.locator("(//div[@class='hero '])[1]").isVisible() === true
+            });
+    
+            check(page, {
+                'Top Rated': (page) =>
+                    page
+                        .locator("(//div[@class='w-top-rated w-top-rated--no-location '])[1]")
+                        .isVisible() === true
+            });
+            page.waitForTimeout(5000);
+        } finally {
+            page.close();
+        }
+    }
