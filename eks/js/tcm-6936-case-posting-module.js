@@ -84,8 +84,7 @@ export const saveYourCaseLocators = {
     lastName: "input[name='lastName']",
     telNumber: '#field-phone',
     emailAddress: "input[name='email']",
-    textMessageCheckbox:
-        '#sapper > main > div > form > fieldset.notify.svelte-jbkws9 > fieldset > label:nth-child(2) > input',
+    textMessageCheckbox: "input[value='true'][name='notifyBySms']",
     nextBtn: "//button[@data-aut='ci_submit-btn']"
 };
 
