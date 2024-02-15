@@ -3,6 +3,7 @@ import { describe } from 'https://jslib.k6.io/k6chaijs/4.3.4.3/index.js';
 import http from 'k6/http';
 import { check } from 'k6';
 import { randomString } from 'https://jslib.k6.io/k6-utils/1.2.0/index.js';
+import { sleep } from 'k6';
 
 /*********************** Test Data ****************************/
 let textDescription = 'K6 Load Browser Test';
