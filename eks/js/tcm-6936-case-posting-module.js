@@ -82,8 +82,7 @@ export const saveYourCaseLocators = {
     saveYourCase: "//h1[normalize-space()='Save Your Case']",
     firstName: "input[name='firstName']",
     lastName: "input[name='lastName']",
-    telNumber:
-        '#sapper > main > div > form > fieldset:nth-child(1) > fieldset:nth-child(7) > section > div > input',
+    telNumber: '#field-phone',
     emailAddress: "input[name='email']",
     textMessageCheckbox:
         '#sapper > main > div > form > fieldset.notify.svelte-jbkws9 > fieldset > label:nth-child(2) > input',
