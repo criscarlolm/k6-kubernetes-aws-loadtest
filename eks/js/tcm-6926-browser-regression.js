@@ -162,7 +162,7 @@ export const responseMessagePageLocators = {
     selectTemplateDropdown: "//select[@id='tid']",
     selectOption: 'template1',
     subjectMessage: "//input[@id='abbr']",
-    messageBody: "//div[@class=' nicEdit-main']",
+    messageBody: '.nicEdit-main',
     sendReplyButton: "//a[normalize-space()='Send Reply']",
     consultationFee: "//input[@id='conFee']",
     consultationValue: '12',
