@@ -36,6 +36,12 @@ export const saveCaseForm = {
     emailAddress: 'legalmatch@getnada.com'
 };
 
+export const httpMetrics = {
+    casePostEnv: 'https://qa3.legalmatch.com/case-post/env',
+    casePostRest: 'https://ccpmtest.legalmatch.com:3010/case-post/rest',
+    casePostExitTest: 'https://qa3.legalmatch.com/case-post/exit/test'
+};
+
 /*********************** Scenario Configuration Virtual Users, Iteration and Duration ****************************/
 export function perVUiterations() {
     return {
@@ -56,6 +62,13 @@ export function perVUiterations() {
             checks: ['rate==1.0']
         }
     };
+}
+
+export function httpMetricsData() {
+    const { casePostEnv, casePostRest, casePostExitTest } = httpMetrics;
+    http.get(casePostEnv);
+    http.options(casePostRest);
+    http.get(casePostExitTest);
 }
 export let options = perVUiterations();
 
@@ -390,4 +403,5 @@ export default async function () {
     });
     let res = http.get(url);
     http.get(res.url);
+    httpMetricsData();
 }
