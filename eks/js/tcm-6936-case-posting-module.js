@@ -37,9 +37,12 @@ export const saveCaseForm = {
 };
 
 export const httpMetrics = {
-    casePostEnv: 'https://qa3.legalmatch.com/case-post/env',
-    casePostRest: 'https://ccpmtest.legalmatch.com:3010/case-post/rest',
-    casePostExitTest: 'https://qa3.legalmatch.com/case-post/exit/test'
+    casePostEnv: 'https://www1.aws.legalmatch.com/post-case/subcategory',
+    caseQuestions: 'https://www1.aws.legalmatch.com/post-case/questions',
+    caseDescription: 'https://www1.aws.legalmatch.com/post-case/description',
+    caseSaveYourCase: 'https://www1.aws.legalmatch.com/post-case/signup',
+    caseEstimate: 'https://www1.aws.legalmatch.com/post-case/cost-estimate',
+    casePostExit: 'https://www1.aws.legalmatch.com/post-case/exit'
 };
 
 /*********************** Scenario Configuration Virtual Users, Iteration and Duration ****************************/
@@ -53,9 +56,9 @@ export function perVUiterations() {
                         type: 'chromium'
                     }
                 },
-                vus: 1,
+                vus: 5,
                 iterations: 1,
-                maxDuration: '5m'
+                maxDuration: '10m'
             }
         },
         thresholds: {
@@ -65,10 +68,20 @@ export function perVUiterations() {
 }
 
 export function httpMetricsData() {
-    const { casePostEnv, casePostRest, casePostExitTest } = httpMetrics;
+    const {
+        casePostEnv,
+        caseQuestions,
+        caseDescription,
+        caseSaveYourCase,
+        caseEstimate,
+        casePostExit
+    } = httpMetrics;
     http.get(casePostEnv);
-    http.options(casePostRest);
-    http.get(casePostExitTest);
+    http.get(caseQuestions);
+    http.get(caseDescription);
+    http.get(caseSaveYourCase);
+    http.get(caseEstimate);
+    http.get(casePostExit);
 }
 export let options = perVUiterations();
 
@@ -125,7 +138,7 @@ export const costEstimatePageLocators = {
 /***********************  Calling Page Object Locators ****************************/
 
 // Search Attorney
-const url = 'https://qa3.legalmatch.com/';
+const url = 'https://www1.aws.legalmatch.com/';
 
 export class SearchAttorneyPage {
     constructor(page) {
