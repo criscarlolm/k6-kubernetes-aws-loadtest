@@ -2,6 +2,39 @@ import { browser } from 'k6/experimental/browser';
 import { describe } from 'https://jslib.k6.io/k6chaijs/4.3.4.3/index.js';
 import http from 'k6/http';
 import { check } from 'k6';
+import { randomString } from 'https://jslib.k6.io/k6-utils/1.2.0/index.js';
+
+/*********************** Test Data ****************************/
+let textDescription = 'K6 Load Browser Test';
+let firstNameValue = 'FirstName';
+let lastNameValue = 'LastName';
+let randomVar = randomString(8);
+const summaryCaseValue = `${textDescription} ${randomVar}`;
+const descriptionCaseValue = `${textDescription} ${randomVar}`;
+const firtName = `${firstNameValue}${randomVar}`;
+const lastName = `${lastNameValue}${randomVar}`;
+
+export const data = {
+    username: 'testattorney',
+    password: 'attorney'
+};
+
+export const searchAttorney = {
+    zipCode: '00001'
+};
+
+export const descriptionText = {
+    summary: summaryCaseValue,
+    description: descriptionCaseValue
+};
+
+export const saveCaseForm = {
+    firstName: firtName,
+    lastName: lastName,
+    zipCode: '00001',
+    telNumber: '4354355345',
+    emailAddress: 'legalmatch@getnada.com'
+};
 
 /*********************** Scenario Configuration Virtual Users, Iteration and Duration ****************************/
 export function perVUiterations() {
@@ -14,7 +47,7 @@ export function perVUiterations() {
                         type: 'chromium'
                     }
                 },
-                vus: 5,
+                vus: 1,
                 iterations: 1,
                 maxDuration: '5m'
             }
@@ -83,7 +116,7 @@ export const costEstimatePageLocators = {
 // Search Attorney
 const url = 'https://qa3.legalmatch.com/';
 
-export class searchAttorneyPage {
+export class SearchAttorneyPage {
     constructor(page) {
         const {
             homePage,
@@ -130,7 +163,7 @@ export class searchAttorneyPage {
 }
 
 // Sub Category Page
-export class subCategoryPage {
+export class SubCategoryPage {
     constructor(page) {
         const { chooseSubCategory, subCategoryVal, subCategoryCheckBox, nextBtn } =
             subCategoryLocators;
@@ -309,8 +342,8 @@ export class CostEstimatePage {
 /***********************  Test Script - Suite ****************************/
 export default async function () {
     const page = browser.newPage();
-    const searchAttorney = new searchAttorneyPage(page);
-    const subCategory = new subCategoryPage(page);
+    const searchAttorney = new SearchAttorneyPage(page);
+    const subCategory = new SubCategoryPage(page);
     const issueSpecificQuestions = new IssueSpecificQuestionsPage(page);
     const descriptions = new DescriptionPage(page);
     const saveYourCase = new SaveYourCasePage(page);
