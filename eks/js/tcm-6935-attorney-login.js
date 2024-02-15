@@ -2,6 +2,7 @@ import { check } from 'k6';
 import { describe } from 'https://jslib.k6.io/k6chaijs/4.3.4.3/index.js';
 import { browser } from 'k6/experimental/browser';
 import http from 'k6/http';
+import { sleep } from 'k6';
 
 // Scenario Configuration Virtual Users, Iteration and Duration
 export function perVUiterations() {
