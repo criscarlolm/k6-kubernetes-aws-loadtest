@@ -5,7 +5,7 @@ import { check } from 'k6';
 import { randomString } from 'https://jslib.k6.io/k6-utils/1.2.0/index.js';
 
 /*********************** Test Data ****************************/
-let textDescription = 'EKS 6VUs 1m K6 Load Browser Test';
+let textDescription = 'VM AUT 6VUs 1m K6 Load Browser Test';
 let firstNameValue = 'FirstName';
 let lastNameValue = 'LastName';
 let randomVar = randomString(8);
