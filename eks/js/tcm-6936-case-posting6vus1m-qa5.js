@@ -51,7 +51,7 @@ export function perVUiterations() {
                         type: 'chromium'
                     }
                 },
-                vus: 5,
+                vus: 6,
                 iterations: 1,
                 maxDuration: '1m'
             }
