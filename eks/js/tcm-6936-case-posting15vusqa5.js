@@ -5,7 +5,7 @@ import { check } from 'k6';
 import { randomString } from 'https://jslib.k6.io/k6-utils/1.2.0/index.js';
 
 /*********************** Test Data ****************************/
-let textDescription = 'AUT-VM server 15VUs K6 Load Browser Test';
+let textDescription = 'AUT-VM server 15VUs 3m QA5 K6 Load Browser Test';
 let firstNameValue = 'FirstName';
 let lastNameValue = 'LastName';
 let randomVar = randomString(8);
@@ -53,7 +53,7 @@ export function perVUiterations() {
                 },
                 vus: 15,
                 iterations: 1,
-                maxDuration: '15m'
+                maxDuration: '3m'
             }
         },
         thresholds: {
