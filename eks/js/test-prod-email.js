@@ -1826,7 +1826,7 @@ export function scenario_1() {
 
         response = http.post(
             'https://www.legalmatch.com/post-case/graphql',
-            '{"email":"WhiteSalamander2024@gmail.com","method":"getClientByUsername"}',
+            '{"email":"criscarloqatest@gmail.com","method":"getClientByUsername"}',
             {
                 headers: {
                     host: 'www.legalmatch.com',
@@ -1851,7 +1851,7 @@ export function scenario_1() {
 
         response = http.post(
             'https://www.legalmatch.com/post-case/graphql',
-            '{"email":"WhiteSalamander2024@gmail.com","method":"getClientByUsername"}',
+            '{"email":"criscarloqatest@gmail.com","method":"getClientByUsername"}',
             {
                 headers: {
                     host: 'www.legalmatch.com',
